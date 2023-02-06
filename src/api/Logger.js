@@ -22,9 +22,16 @@ export class Logger {
   }
 
   write(level, text) {
-    console.log(
-      `[${this.getColorizeLevel(level)}] [${this.options.name}] ${text}`
-    );
+    if (this.options.plugin) {
+      console.log(
+        `[${this.getColorizeLevel(level)} Plugin] [${
+          this.options.name
+        }] ${text}`
+      );
+    } else
+      console.log(
+        `[${this.getColorizeLevel(level)}] [${this.options.name}] ${text}`
+      );
   }
 
   getColorizeLevel(level) {

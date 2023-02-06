@@ -1,5 +1,5 @@
 import { Base } from "../../src/plugins/BasePlugin.js";
-import chalk from "chalk";
+import Colors from "../../src/api/Colors.js";
 
 class Welcomer extends Base {
   constructor() {
@@ -10,24 +10,19 @@ class Welcomer extends Base {
     });
   }
 
+  onEnable() {
+    this.api.getLogger().info("The plugin had been enabled");
+  }
+
   /**
    *
    * @param {import('bedrock-protocol').Client} player
    */
   onPlayerJoin(player) {
-    player.queue("text", {
-      type: "chat",
-      needs_transation: false,
-      source_name: "",
-      xuid: "",
-      platform_chat_id: "",
-      message: `§e${player.username} joined`,
-    });
-    console.log(
-      `[${chalk.blue("INFO")}] [Welcomer] ${chalk.yellow(
-        `${player.username} joined`
-      )}`
-    );
+    this.api
+      .getServer()
+      .broadcast(player, Colors.yellow(`${player.username} joined`));
+    this.api.getLogger().info(Colors.yellow(`${player.username} joined`, true));
   }
 }
 

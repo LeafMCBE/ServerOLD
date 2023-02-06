@@ -104,20 +104,6 @@ export default class ResourcePackClientResponse {
         setTimeout(async () => {
           // Allow the client to spawn
           client.write("play_status", { status: "player_spawn" });
-          try {
-            for (let plugin of await server.plugins.load()) {
-              if (plugin.onPlayerJoin) plugin.onPlayerJoin(client);
-            }
-          } catch (e) {
-            if (server.config.notCrashOnPluginError) {
-              server.logger.warn(
-                `Error from Plugin in Having all rps. Not exiting due to configure.`
-              );
-            } else {
-              server.logger.error(`Error from Plugin`);
-              throw e;
-            }
-          }
         }, 3000);
         break;
     }

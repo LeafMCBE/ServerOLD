@@ -1,4 +1,5 @@
 import { Client } from "bedrock-protocol";
+import Server from "../Server";
 
 export interface BaseOptions {
   name: string;
@@ -7,6 +8,10 @@ export interface BaseOptions {
 }
 
 export declare class Base {
+  public readonly api: {
+    getLogger: () => Logger;
+    getServer: () => Server;
+  };
   public readonly options: BaseOptions;
 
   constructor(options: BaseOptions): void;
@@ -14,6 +19,7 @@ export declare class Base {
   onEnable(): void;
   onDisable(): void;
   onPlayerJoin(player: Client): void;
+  onPlayerLeave(player: Client): void;
   onPlayerHavingAllRps(): void;
   onPlayerRefusedRps(): void;
   onPlayerInstalledRps(): void;

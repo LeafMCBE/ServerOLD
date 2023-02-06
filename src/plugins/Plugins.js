@@ -5,8 +5,6 @@ import { promisify } from "util";
 const PG = promisify(glob);
 
 export class Plugins {
-  all = [];
-
   validate() {
     if (!statSync("./leaf/plugins").isDirectory()) {
       this.createDir();

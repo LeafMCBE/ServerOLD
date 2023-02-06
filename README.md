@@ -37,7 +37,6 @@ class Example extends Base {
 
 ## Todo List
 
-- Add Plugin API (this.getLogger() in plugins)
 - Convert Packet into JS (not json)
 - Add chunk support (maybe)
 - Commands System

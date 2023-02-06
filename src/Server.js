@@ -57,12 +57,40 @@ class Server {
               }
             });
           });
+
+          client.on("spawn", async () => {
+            try {
+              for (let plugin of await this.plugins.load()) {
+                if (plugin.onPlayerJoin) plugin.onPlayerJoin(client);
+              }
+            } catch (e) {
+              if (this.config.notCrashOnPluginError) {
+                this.logger.warn(
+                  `Error from Plugin in Having all rps. Not exiting due to configure.`
+                );
+              } else {
+                this.logger.error(`Error from Plugin`);
+                throw e;
+              }
+            }
+          });
         });
       } catch (e) {
         this.logger.error(`500 Internal Server Error:`);
         throw e;
       }
     })();
+  }
+
+  broadcast(client, message) {
+    client.queue("text", {
+      type: "chat",
+      needs_transation: false,
+      source_name: "",
+      xuid: "",
+      platform_chat_id: "",
+      message: message,
+    });
   }
 
   packet(packet, client) {
