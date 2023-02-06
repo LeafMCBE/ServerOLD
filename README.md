@@ -30,7 +30,7 @@ class Example extends Base {
   }
 
   onEnable() {
-    console.log("I am enabled!");
+    this.api.getLogger().info("I am enabled!");
   }
 }
 ```
