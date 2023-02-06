@@ -11,11 +11,6 @@
     "type": "git",
     "url": "git+https://github.com/hvlxh/LeafMCBE.git"
   },
-  "keywords": [
-    "mcbe",
-    "raknet",
-    "minecraft"
-  ],
   "author": "hvlxh",
   "license": "MIT",
   "bugs": {

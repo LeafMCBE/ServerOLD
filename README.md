@@ -1,6 +1,11 @@
 # LeafMCBE
 
-A Server Software for Minecraft: Bedrock Edition written in Javascript (With types) with [@PrismarineJS/bedrock-protocol](https://github.com/PrismarineJS/bedrock-protocol). Server Under Development
+A Server Software for Minecraft: Bedrock Edition written in Javascript (With types). Server under development
+
+## Link
+
+[Discord](https://discord.gg/MdkcEWjdEn) <br>
+[Protocol](https://github.com/PrismarineJS/bedrock-protocol)
 
 ## Features
 
