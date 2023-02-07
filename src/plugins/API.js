@@ -4,7 +4,7 @@ import srv from "../../start.js";
 export default (options) => {
   return {
     getLogger: () =>
-      new Logger({ name: options.name, debug: srv.config.debug, plugin: true }),
+      new Logger({ name: options.name, debug: srv.config.debug }),
     getServer: () => srv,
   };
 };

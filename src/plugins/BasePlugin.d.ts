@@ -1,4 +1,5 @@
 import { Client } from "bedrock-protocol";
+import { Logger } from "../api/Logger";
 import Server from "../Server";
 
 export interface BaseOptions {
@@ -14,7 +15,7 @@ export declare class Base {
   };
   public readonly options: BaseOptions;
 
-  constructor(options: BaseOptions): void;
+  constructor(options: BaseOptions);
 
   onEnable(): void;
   onDisable(): void;
