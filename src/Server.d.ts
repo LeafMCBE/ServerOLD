@@ -11,5 +11,5 @@ export default class {
 
   constructor();
 
-  public broadcast(client: Client, message: text): void;
+  public broadcast(client: Client, message: string): void;
 }
