@@ -210,6 +210,41 @@ const Colors = {
       return `§f${text}`;
     }
   },
+
+  /**
+   * @param {string} text
+   * @returns {string}
+   */
+  colorize(text) {
+    const ar = text.split(" ");
+
+    ar.forEach((text, index) => {
+      colors.forEach((c) => {
+        if (text.startsWith(c.mc)) ar[index] = c.method(text.substring(2));
+      });
+    });
+
+    return ar.join(" ");
+  },
 };
+
+const colors = [
+  { mc: "§0", method: (t) => chalk.black(t) },
+  { mc: "§1", method: (t) => chalk.blue(t) },
+  { mc: "§2", method: (t) => chalk.green(t) },
+  { mc: "§3", method: (t) => chalk.cyan(t) },
+  { mc: "§4", method: (t) => chalk.red(t) },
+  { mc: "§5", method: (t) => chalk.purple(t) },
+  { mc: "§6", method: (t) => chalk.yellow(t) },
+  { mc: "§7", method: (t) => chalk.gray(t) },
+  { mc: "§8", method: (t) => chalk.grey(t) },
+  { mc: "§9", method: (t) => chalk.blueBright(t) },
+  { mc: "§a", method: (t) => chalk.greenBright(t) },
+  { mc: "§b", method: (t) => chalk.cyanBright(t) },
+  { mc: "§c", method: (t) => chalk.redBright(t) },
+  { mc: "§d", method: (t) => chalk.purpleBright(t) },
+  { mc: "§e", method: (t) => chalk.yellowBright(t) },
+  { mc: "§f", method: (t) => chalk.white(t) },
+];
 
 export default Colors;

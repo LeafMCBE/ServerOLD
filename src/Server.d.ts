@@ -5,7 +5,11 @@ import { Plugins } from "./plugins/Plugins";
 
 export default class {
   public readonly config: Configure;
-  public readonly logger: Logger;
+  public readonly logger: {
+    srv: Logger;
+    plugin: Logger;
+    chat: Logger;
+  };
   public readonly srv: Server;
   public readonly plugins: Plugins;
 

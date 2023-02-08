@@ -10,7 +10,7 @@ export default class ResourcePackClientResponse {
   async handle(server, client, packet) {
     switch (packet.data.params.response_status) {
       case "refused":
-        server.logger.debug(
+        server.logger.srv.debug(
           `${client.username} refused to install rps, kicking...`
         );
         try {
@@ -18,32 +18,20 @@ export default class ResourcePackClientResponse {
             if (plugin.onPlayerRefusedRps) plugin.onPlayerRefusedRps();
           }
         } catch (e) {
-          if (server.config.notCrashOnPluginError) {
-            server.logger.warn(
-              `Error from Plugin in Having all rps. Not exiting due to configure.`
-            );
-          } else {
-            server.logger.error(`Error from Plugin`);
-            throw e;
-          }
+          server.logger.srv.error(`Error from Plugin`);
+          throw e;
         }
         client.disconnect(`Refused to install RPS`);
         break;
       case "have_all_packs":
-        server.logger.debug(`${client.username} have all the rps.`);
+        server.logger.srv.debug(`${client.username} have all the rps.`);
         try {
           for (let plugin of await server.plugins.load()) {
             if (plugin.onPlayerHavingAllRps) plugin.onPlayerHavingAllRps();
           }
         } catch (e) {
-          if (server.config.notCrashOnPluginError) {
-            server.logger.warn(
-              `Error from Plugin in Having all rps. Not exiting due to configure.`
-            );
-          } else {
-            server.logger.error(`Error from Plugin`);
-            throw e;
-          }
+          server.logger.srv.error(`Error from Plugin`);
+          throw e;
         }
         break;
       case "completed":
@@ -92,11 +80,11 @@ export default class ResourcePackClientResponse {
           }
         } catch (e) {
           if (server.config.notCrashOnPluginError) {
-            server.logger.warn(
+            server.logger.srv.warn(
               `Error from Plugin in Having all rps. Not exiting due to configure.`
             );
           } else {
-            server.logger.error(`Error from Plugin`);
+            server.logger.srv.error(`Error from Plugin`);
             throw e;
           }
         }

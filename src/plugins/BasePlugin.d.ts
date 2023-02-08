@@ -20,6 +20,7 @@ export declare class Base {
   onEnable(): void;
   onDisable(): void;
   onPlayerJoin(player: Client): void;
+  onPlayerPreJoin(player: Client): void;
   onPlayerLeave(player: Client): void;
   onPlayerHavingAllRps(): void;
   onPlayerRefusedRps(): void;

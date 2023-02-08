@@ -4,21 +4,26 @@ import ResourcePackClientResponse from "./packets/handler/ResourcePackClientResp
 import { Logger } from "./api/Logger.js";
 import { config } from "../leaf/config.js";
 import { Plugins } from "./plugins/Plugins.js";
+import Colors from "./api/Colors.js";
 
 class Server {
   config = config;
-  logger = new Logger({ name: "Server", debug: this.config.debug });
+  logger = {
+    srv: new Logger({ name: "Server", debug: this.config.debug }),
+    plugin: new Logger({ name: "Plugins", debug: this.config.debug }),
+    chat: new Logger({ name: "Chat", debug: this.config.debug }),
+  };
   plugins = new Plugins();
   srv;
 
   constructor() {
     (async () => {
-      this.logger.info("Starting Server...");
+      this.logger.srv.info("Starting Server...");
       try {
         this.srv = Protocol.createServer(this.config);
-        this.logger.info(`Listening to ${config.host}:${config.port}`);
+        this.logger.srv.info(`Listening to ${config.host}:${config.port}`);
         for (let plugin of await this.plugins.load()) {
-          this.logger.info(
+          this.logger.plugin.info(
             `Loading Plugin - ${
               plugin.options.name
             }:${plugin.options.version.join(".")}`
@@ -27,7 +32,7 @@ class Server {
         }
 
         this.srv.on("connect", async (client) => {
-          client.on("join", () => {
+          client.on("join", async () => {
             client.username = client.getUserData().displayName;
 
             client.write("resource_packs_info", {
@@ -47,6 +52,21 @@ class Server {
               experiments: [],
               experiments_previously_used: false,
             });
+
+            try {
+              for (let plugin of await this.plugins.load()) {
+                if (plugin.onPlayerPreJoin) plugin.onPlayerPreJoin(client);
+              }
+            } catch (e) {
+              if (this.config.notCrashOnPluginError) {
+                this.logger.warn(
+                  `Error from Plugin in Having all rps. Not exiting due to configure.`
+                );
+              } else {
+                this.logger.error(`Error from Plugin`);
+                throw e;
+              }
+            }
 
             client.on("packet", (packet) => {
               try {
@@ -91,9 +111,10 @@ class Server {
       platform_chat_id: "",
       message: message,
     });
+    this.logger.chat.info(Colors.colorize(message));
   }
 
-  packet(packet, client) {
+  async packet(packet, client) {
     switch (packet.data.name) {
       case "resource_pack_client_response":
         new ResourcePackClientResponse().handle(this, client, packet);
@@ -102,12 +123,14 @@ class Server {
         client.queue("text", {
           type: "chat",
           needs_transation: false,
-          source_name: client.username,
+          source_name: "",
           xuid: "",
           platform_chat_id: "",
-          message: `${packet.data.params.message}`,
+          message: `<${client.username}> ${packet.data.params.message}`,
         });
-        this.logger.info(`<${client.username}> ${packet.data.params.message}`);
+        this.logger.chat.info(
+          `<${client.username}> ${packet.data.params.message}`
+        );
         break;
     }
   }
