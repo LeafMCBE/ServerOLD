@@ -97,7 +97,7 @@ class Server {
           });
         });
       } catch (e) {
-        this.logger.error(`500 Internal Server Error:`);
+        this.logger.srv.error(`500 Internal Server Error:`);
         throw e;
       }
     })();

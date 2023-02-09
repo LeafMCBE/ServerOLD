@@ -15,7 +15,7 @@ export class Plugins {
     this.validate();
     let _ = [];
 
-    const files = await PG("./leaf/plugins/*");
+    const files = await PG("./leaf/plugins/**/*.js");
     for (const file of files) {
       const url = `file://${process.cwd().replace(/\\/g, "/")}`;
       const f = (await import(join(url, file.substring(1)))).default;

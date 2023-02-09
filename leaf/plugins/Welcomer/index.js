@@ -1,5 +1,5 @@
-import { Base } from "../../src/plugins/BasePlugin.js";
-import Colors from "../../src/api/Colors.js";
+import { Base } from "../../../src/plugins/BasePlugin.js";
+import Colors from "../../../src/api/Colors.js";
 
 class Welcomer extends Base {
   constructor() {
