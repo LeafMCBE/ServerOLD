@@ -24,9 +24,7 @@ class Server {
         this.logger.srv.info(`Listening to ${config.host}:${config.port}`);
         for (let plugin of await this.plugins.load()) {
           this.logger.plugin.info(
-            `Loading Plugin - ${
-              plugin.options.name
-            }:${plugin.options.version.join(".")}`
+            `Loading ${plugin.options.name}:${plugin.options.version.join(".")}`
           );
           if (plugin.onEnable) plugin.onEnable();
         }
@@ -129,7 +127,7 @@ class Server {
           message: `<${client.username}> ${packet.data.params.message}`,
         });
         this.logger.chat.info(
-          `<${client.username}> ${packet.data.params.message}`
+          Colors.colorize(`<${client.username}> ${packet.data.params.message}`)
         );
         break;
     }

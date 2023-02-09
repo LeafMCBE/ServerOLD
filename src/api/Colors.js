@@ -224,27 +224,27 @@ const Colors = {
       });
     });
 
-    return ar.join(" ");
+    return `${ar.join(" ")}\x1b[0m`;
   },
 };
 
 const colors = [
-  { mc: "§0", method: (t) => chalk.black(t) },
-  { mc: "§1", method: (t) => chalk.blue(t) },
-  { mc: "§2", method: (t) => chalk.green(t) },
-  { mc: "§3", method: (t) => chalk.cyan(t) },
-  { mc: "§4", method: (t) => chalk.red(t) },
-  { mc: "§5", method: (t) => chalk.purple(t) },
-  { mc: "§6", method: (t) => chalk.yellow(t) },
-  { mc: "§7", method: (t) => chalk.gray(t) },
-  { mc: "§8", method: (t) => chalk.grey(t) },
-  { mc: "§9", method: (t) => chalk.blueBright(t) },
-  { mc: "§a", method: (t) => chalk.greenBright(t) },
-  { mc: "§b", method: (t) => chalk.cyanBright(t) },
-  { mc: "§c", method: (t) => chalk.redBright(t) },
-  { mc: "§d", method: (t) => chalk.purpleBright(t) },
-  { mc: "§e", method: (t) => chalk.yellowBright(t) },
-  { mc: "§f", method: (t) => chalk.white(t) },
+  { mc: "§0", method: (t) => `\x1b[30m${t}` },
+  { mc: "§1", method: (t) => `\x1b[34m${t}` },
+  { mc: "§2", method: (t) => `\x1b[32m${t}` },
+  { mc: "§3", method: (t) => `\x1b[36m${t}` },
+  { mc: "§4", method: (t) => `\x1b[31m${t}` },
+  { mc: "§5", method: (t) => `\x1b[35m${t}` },
+  { mc: "§6", method: (t) => `\x1b[33m${t}` },
+  { mc: "§7", method: (t) => `\x1b[37m${t}` },
+  { mc: "§8", method: (t) => `\x1b[90m${t}` },
+  { mc: "§9", method: (t) => `\x1b[94m${t}` },
+  { mc: "§a", method: (t) => `\x1b[92m${t}` },
+  { mc: "§b", method: (t) => `\x1b[96m${t}` },
+  { mc: "§c", method: (t) => `\x1b[91m${t}` },
+  { mc: "§d", method: (t) => `\x1b[95m${t}` },
+  { mc: "§e", method: (t) => `\x1b[93m${t}` },
+  { mc: "§f", method: (t) => `\x1b[97m${t}` },
 ];
 
 export default Colors;
