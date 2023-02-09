@@ -31,7 +31,10 @@ class Server {
 
         this.srv.on("connect", async (client) => {
           client.on("join", async () => {
+            client.ip = client.connection.address;
             client.username = client.getUserData().displayName;
+
+            this.logger.srv.info(`${client.username}[${client.ip}] connected`);
 
             client.write("resource_packs_info", {
               must_accept: false,
