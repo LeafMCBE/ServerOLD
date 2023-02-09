@@ -1,7 +1,18 @@
-import { Server, Client } from "bedrock-protocol";
-import { Configure } from "../leaf/config";
+import { Server, Client, Version } from "bedrock-protocol";
 import { Logger } from "./api/Logger";
 import { Plugins } from "./plugins/Plugins";
+
+interface Configure {
+  Server: {
+    host: string;
+    port: number;
+    motd: string;
+    version: {
+      min: Version;
+      max: Version;
+    };
+  };
+}
 
 export default class {
   public readonly config: Configure;

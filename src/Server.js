@@ -1,13 +1,15 @@
 import Protocol from "bedrock-protocol";
 import ResourcePackClientResponse from "./packets/handler/ResourcePackClientResponse.js";
+import fs from "fs";
+import YML from "yaml";
 
 import { Logger } from "./api/Logger.js";
-import { config } from "../leaf/config.js";
 import { Plugins } from "./plugins/Plugins.js";
 import Colors from "./api/Colors.js";
+const config = fs.readFileSync("./leaf/config.yml", "utf-8");
 
 class Server {
-  config = config;
+  config = YML.parse(config);
   logger = {
     srv: new Logger({ name: "Server", debug: this.config.debug }),
     plugin: new Logger({ name: "Plugins", debug: this.config.debug }),
@@ -20,8 +22,17 @@ class Server {
     (async () => {
       this.logger.srv.info("Starting Server...");
       try {
-        this.srv = Protocol.createServer(this.config);
-        this.logger.srv.info(`Listening to ${config.host}:${config.port}`);
+        this.srv = Protocol.createServer({
+          host: this.config.Server.host,
+          port: this.config.Server.port,
+          motd: {
+            motd: this.config.Server.motd,
+          },
+          version: this.config.Server.version.min,
+        });
+        this.logger.srv.info(
+          `Listening to ${this.config.Server.host}:${this.config.Server.port}`
+        );
         for (let plugin of await this.plugins.load()) {
           this.logger.plugin.info(
             `Loading ${plugin.options.name}:${plugin.options.version.join(".")}`
