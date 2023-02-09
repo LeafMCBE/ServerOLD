@@ -1,8 +1,5 @@
 import { mkdirSync, statSync } from "fs";
-import glob from "glob";
-import { join } from "path";
-import { promisify } from "util";
-const PG = promisify(glob);
+import fs from "fs/promises";
 
 export class Plugins {
   validate() {
@@ -15,10 +12,11 @@ export class Plugins {
     this.validate();
     let _ = [];
 
-    const files = await PG("./leaf/plugins/**/*.js");
-    for (const file of files) {
+    const folders = await fs.readdir("./leaf/plugins");
+    for (let folder of folders) {
       const url = `file://${process.cwd().replace(/\\/g, "/")}`;
-      const f = (await import(join(url, file.substring(1)))).default;
+      const f = (await import(`${url}/leaf/plugins/${folder}/index.js`))
+        .default;
       _.push(new f());
     }
 
