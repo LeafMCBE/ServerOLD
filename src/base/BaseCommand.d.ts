@@ -1,9 +1,14 @@
 import Server from "../Server";
 import { Logger } from "../console/Logger";
+import Player from "../api/Player";
 
 interface Options {
   name: string;
   aliases: string[];
+  args: {
+    min: number;
+    max: number;
+  };
 }
 
 export declare class Command {
@@ -16,4 +21,5 @@ export declare class Command {
   constructor(options: Options);
 
   public run(args: string[]): void;
+  public runAsPlayer(player: Player, args: string[]): void;
 }

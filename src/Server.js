@@ -10,6 +10,12 @@ import CCS from "./console/ConsoleCommandSender.js";
 import Player from "./api/Player.js";
 const config = fs.readFileSync("./leaf/config.yml", "utf-8");
 
+if (YML.parse(config).LeafMCBE.doNotCrashOnError) {
+  process.on("uncaughtException", (e) => console.error(e));
+  process.on("uncaughtExceptionMonitor", (e) => console.error(e));
+  process.on("unhandledRejection", (e) => console.error(e));
+}
+
 class Server {
   /**
    * @type {import('./api/Player').default[]}
@@ -84,14 +90,8 @@ class Server {
                 if (plugin.onPlayerPreJoin) plugin.onPlayerPreJoin(client);
               }
             } catch (e) {
-              if (this.config.notCrashOnPluginError) {
-                this.logger.warn(
-                  `Error from Plugin in Having all rps. Not exiting due to configure.`
-                );
-              } else {
-                this.logger.error(`Error from Plugin`);
-                throw e;
-              }
+              this.logger.error(`Error from Plugin`);
+              throw e;
             }
 
             client.on("packet", (packet) => {
@@ -159,6 +159,32 @@ class Server {
         this.logger.chat.info(
           Colors.colorize(`<${client.username}> ${packet.data.params.message}`)
         );
+        break;
+      case "command_request":
+        var cmdName = packet.data.params.command;
+        this.console.commands.forEach((cmd) => {
+          if (
+            cmdName.startsWith(`/${cmd.options.name.toLowerCase()}`) ||
+            cmd.options.aliases.includes(cmdName.replace("/", ""))
+          ) {
+            var min = String(cmdName).split(" ").slice(1).length;
+            if (min < cmd.options.args.min)
+              return new Player(client).send(
+                `Minimum argument is ${cmd.options.args.min} but got ${min}`
+              );
+
+            if (cmd.options.args.max < min)
+              return new Player(client).send(
+                `Maximum arguments is ${cmd.options.args.min} but got ${min}`
+              );
+
+            console.log(String(cmdName).split(" ").slice(1));
+            cmd.runAsPlayer(
+              new Player(client),
+              String(cmdName).split(" ").slice(1)
+            );
+          }
+        });
         break;
     }
   }

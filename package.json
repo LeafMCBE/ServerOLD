@@ -5,7 +5,8 @@
   "type": "module",
   "main": "start.js",
   "scripts": {
-    "start": "node ."
+    "start": "node .",
+    "dev": "nodemon ."
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "chalk": "^5.2.0",
     "eslint": "^8.33.0",
+    "nodemon": "^2.0.20",
     "yaml": "^2.2.1"
   }
 }
