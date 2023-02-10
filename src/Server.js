@@ -11,9 +11,9 @@ const config = fs.readFileSync("./leaf/config.yml", "utf-8");
 class Server {
   config = YML.parse(config);
   logger = {
-    srv: new Logger({ name: "Server", debug: this.config.debug }),
-    plugin: new Logger({ name: "Plugins", debug: this.config.debug }),
-    chat: new Logger({ name: "Chat", debug: this.config.debug }),
+    srv: new Logger({ name: "Server", debug: this.config.LeafMCBE.debug }),
+    plugin: new Logger({ name: "Plugins", debug: this.config.LeafMCBE.debug }),
+    chat: new Logger({ name: "Chat", debug: this.config.LeafMCBE.debug }),
   };
   plugins = new Plugins();
   srv;
@@ -28,7 +28,7 @@ class Server {
           motd: {
             motd: this.config.Server.motd,
           },
-          version: this.config.Server.version.min,
+          version: String(this.config.Server.version),
         });
         this.logger.srv.info(
           `Listening to ${this.config.Server.host}:${this.config.Server.port}`

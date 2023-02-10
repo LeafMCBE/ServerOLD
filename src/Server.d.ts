@@ -7,10 +7,11 @@ interface Configure {
     host: string;
     port: number;
     motd: string;
-    version: {
-      min: Version;
-      max: Version;
-    };
+    version: Version;
+  };
+  LeafMCBE: {
+    debug: boolean;
+    showDateOnLogging: boolean;
   };
 }
 

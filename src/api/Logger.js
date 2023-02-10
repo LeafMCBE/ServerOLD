@@ -1,5 +1,9 @@
 import chalk from "chalk";
+import fs from "fs";
+import YML from "yaml";
 
+const Config = fs.readFileSync("./leaf/config.yml", "utf-8");
+const config = YML.parse(Config);
 export class Logger {
   constructor(options) {
     this.options = options;
@@ -22,13 +26,17 @@ export class Logger {
   }
 
   write(level, text) {
-    if (this.options.plugin) {
+    const d = new Date();
+    if (config.LeafMCBE.showDateOnLogging)
       console.log(
-        `[${this.getColorizeLevel(level)} Plugin] [${
+        `[${d
+          .toLocaleString()
+          .replace(", ", " ")
+          .toUpperCase()} ${this.getColorizeLevel(level)}] [${
           this.options.name
         }] ${text}`
       );
-    } else
+    else
       console.log(
         `[${this.getColorizeLevel(level)}] [${this.options.name}] ${text}`
       );

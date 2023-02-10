@@ -3,7 +3,6 @@ type LoggerLevels = "info" | "warn" | "error" | "debug";
 interface LoggerOptions {
   name: string;
   debug?: boolean;
-  plugin?: boolean;
 }
 
 declare class Logger {
