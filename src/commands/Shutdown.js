@@ -1,4 +1,3 @@
-import server from "../../start.js";
 import { Command } from "../base/BaseCommand.js";
 
 class Shutdown extends Command {
@@ -12,7 +11,7 @@ class Shutdown extends Command {
   run() {
     this.api.getLogger().info("Shut downing the server in few seconds...");
     setTimeout(() => {
-      server.srv.close("Server Closed");
+      this.api.getServer().srv.close("Server Closed");
       process.exit(0);
     }, 2000);
   }

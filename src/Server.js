@@ -7,9 +7,14 @@ import { Logger } from "./console/Logger.js";
 import { Plugins } from "./plugins/Plugins.js";
 import Colors from "./api/Colors.js";
 import CCS from "./console/ConsoleCommandSender.js";
+import Player from "./api/Player.js";
 const config = fs.readFileSync("./leaf/config.yml", "utf-8");
 
 class Server {
+  /**
+   * @type {import('./api/Player').default[]}
+   */
+  clients = [];
   config = YML.parse(config);
   logger = {
     srv: new Logger({ name: "Server", debug: this.config.LeafMCBE.debug }),
@@ -50,6 +55,9 @@ class Server {
           client.on("join", async () => {
             client.ip = client.connection.address;
             client.username = client.getUserData().displayName;
+
+            const pl = new Player(client);
+            this.clients.push(pl);
 
             this.logger.srv.info(`${client.username}[${client.ip}] connected`);
 
@@ -103,11 +111,11 @@ class Server {
               }
             } catch (e) {
               if (this.config.notCrashOnPluginError) {
-                this.logger.warn(
+                this.logger.srv.warn(
                   `Error from Plugin in Having all rps. Not exiting due to configure.`
                 );
               } else {
-                this.logger.error(`Error from Plugin`);
+                this.logger.srv.error(`Error from Plugin`);
                 throw e;
               }
             }
@@ -120,14 +128,16 @@ class Server {
     })();
   }
 
-  broadcast(client, message) {
-    client.queue("text", {
-      type: "chat",
-      needs_transation: false,
-      source_name: "",
-      xuid: "",
-      platform_chat_id: "",
-      message: message,
+  broadcast(message) {
+    this.clients.forEach((pl) => {
+      pl.client.queue("text", {
+        type: "chat",
+        needs_transation: false,
+        source_name: "",
+        xuid: "",
+        platform_chat_id: "",
+        message: message,
+      });
     });
     this.logger.chat.info(Colors.colorize(message));
   }

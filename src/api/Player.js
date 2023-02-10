@@ -1,4 +1,4 @@
-import srv from "../../start";
+import srv from "../../start.js";
 
 class Player {
   /**

@@ -19,9 +19,7 @@ class Welcomer extends Base {
    * @param {import('bedrock-protocol').Client} player
    */
   onPlayerJoin(player) {
-    this.api
-      .getServer()
-      .broadcast(player, Colors.yellow(`${player.username} joined`));
+    this.api.getServer().broadcast(Colors.yellow(`${player.username} joined`));
   }
 
   /**
