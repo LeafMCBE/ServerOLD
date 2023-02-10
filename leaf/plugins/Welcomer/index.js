@@ -27,10 +27,7 @@ class Welcomer extends Base {
    * @param {import('bedrock-protocol').Client} player
    */
   onPlayerLeave(player) {
-    this.api
-      .getServer()
-      .broadcast(player, Colors.yellow(`${player.username} left`));
-    this.api.getLogger().info(Colors.yellow(`${player.username} left`, true));
+    this.api.getServer().broadcast(Colors.yellow(`${player.username} left`));
   }
 }
 

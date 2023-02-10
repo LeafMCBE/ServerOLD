@@ -8,6 +8,7 @@ import { Plugins } from "./plugins/Plugins.js";
 import Colors from "./api/Colors.js";
 import CCS from "./console/ConsoleCommandSender.js";
 import Player from "./api/Player.js";
+import Events from "./api/Events.js";
 const config = fs.readFileSync("./leaf/config.yml", "utf-8");
 
 if (YML.parse(config).LeafMCBE.doNotCrashOnError) {
@@ -28,6 +29,7 @@ class Server {
     chat: new Logger({ name: "Chat", debug: this.config.LeafMCBE.debug }),
   };
   console = new CCS();
+  events = new Events();
   plugins = new Plugins();
   srv;
 
@@ -105,6 +107,7 @@ class Server {
           });
 
           client.on("spawn", async () => {
+            this.events.emit("playerJoin", new Player(client));
             try {
               for (let plugin of await this.plugins.load()) {
                 if (plugin.onPlayerJoin) plugin.onPlayerJoin(client);
@@ -178,13 +181,29 @@ class Server {
                 `Maximum arguments is ${cmd.options.args.min} but got ${min}`
               );
 
-            console.log(String(cmdName).split(" ").slice(1));
             cmd.runAsPlayer(
               new Player(client),
               String(cmdName).split(" ").slice(1)
             );
           }
         });
+        break;
+      case "disconnect":
+        this.events.emit("playerLeft", new Player(client));
+        try {
+          for (let plugin of await this.plugins.load()) {
+            if (plugin.onPlayerLeave) plugin.onPlayerLeave(client);
+          }
+        } catch (e) {
+          if (this.config.notCrashOnPluginError) {
+            this.logger.srv.warn(
+              `Error from Plugin in Having all rps. Not exiting due to configure.`
+            );
+          } else {
+            this.logger.srv.error(`Error from Plugin`);
+            throw e;
+          }
+        }
         break;
     }
   }
