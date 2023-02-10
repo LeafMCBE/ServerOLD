@@ -1,5 +1,5 @@
 import { Server, Client, Version } from "bedrock-protocol";
-import { Logger } from "./api/Logger";
+import { Logger } from "./console/Logger";
 import { Plugins } from "./plugins/Plugins";
 
 interface Configure {

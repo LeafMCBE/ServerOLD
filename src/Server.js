@@ -3,9 +3,10 @@ import ResourcePackClientResponse from "./packets/handler/ResourcePackClientResp
 import fs from "fs";
 import YML from "yaml";
 
-import { Logger } from "./api/Logger.js";
+import { Logger } from "./console/Logger.js";
 import { Plugins } from "./plugins/Plugins.js";
 import Colors from "./api/Colors.js";
+import CCS from "./console/ConsoleCommandSender.js";
 const config = fs.readFileSync("./leaf/config.yml", "utf-8");
 
 class Server {
@@ -15,6 +16,7 @@ class Server {
     plugin: new Logger({ name: "Plugins", debug: this.config.LeafMCBE.debug }),
     chat: new Logger({ name: "Chat", debug: this.config.LeafMCBE.debug }),
   };
+  console = new CCS();
   plugins = new Plugins();
   srv;
 
@@ -33,12 +35,16 @@ class Server {
         this.logger.srv.info(
           `Listening to ${this.config.Server.host}:${this.config.Server.port}`
         );
+
         for (let plugin of await this.plugins.load()) {
           this.logger.plugin.info(
             `Loading ${plugin.options.name}:${plugin.options.version.join(".")}`
           );
           if (plugin.onEnable) plugin.onEnable();
         }
+
+        this.logger.srv.debug("Loading Console Command Sender...");
+        this.console.start();
 
         this.srv.on("connect", async (client) => {
           client.on("join", async () => {

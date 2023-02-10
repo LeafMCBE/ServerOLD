@@ -1,4 +1,4 @@
-import API from "./API.js";
+import API from "../plugins/API.js";
 
 export class Base {
   options;
