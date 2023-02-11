@@ -1,8 +1,8 @@
 import { Server, Client, Version } from "bedrock-protocol";
-import { Logger } from "./console/Logger";
-import { Plugins } from "./plugins/Plugins";
-import CCS from "./console/ConsoleCommandSender";
-import Player from "./api/Player";
+import { Logger } from "../src/console/Logger";
+import { Plugins } from "../src/plugins/Plugins";
+import CCS from "../src/console/ConsoleCommandSender";
+import Player from "../src/api/Player";
 
 interface Configure {
   Server: {

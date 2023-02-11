@@ -1,6 +1,6 @@
 import { Client } from "bedrock-protocol";
-import { Logger } from "../console/Logger";
-import Server from "../Server";
+import { Logger } from "../../src/console/Logger";
+import Server from "../../src/Server";
 
 export interface BaseOptions {
   name: string;

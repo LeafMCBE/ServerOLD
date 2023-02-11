@@ -1,4 +1,4 @@
-import { Logger } from "../console/Logger.js";
+import { Logger } from "./Logger.js";
 import srv from "../../start.js";
 
 export default () => {
