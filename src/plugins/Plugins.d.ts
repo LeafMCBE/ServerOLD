@@ -1,4 +1,4 @@
-import { Base } from "../../src/base/BasePlugin";
+import { Base } from "../base/BasePlugin.js";
 
 export declare class Plugins {
   public validate(): void;

@@ -3,7 +3,7 @@ import { Client } from "bedrock-protocol";
 export default class ResourcePackClientResponse {
   /**
    *
-   * @param {import('../../Server').default} server
+   * @param {import('../../Server.js').default} server
    * @param {Client} client
    * @param {*} packet
    */
@@ -88,6 +88,45 @@ export default class ResourcePackClientResponse {
             throw e;
           }
         }
+
+        let commands = {
+          values_len: 0,
+          _enum_type: "byte",
+          enum_values: [],
+          suffixes: [],
+          enums: [],
+          command_data: [],
+          dynamic_enums: [],
+          enum_constraints: [],
+        };
+
+        server.console.commands.forEach((cmd) => {
+          commands.command_data.push({
+            name: cmd.options.name,
+            description: cmd.options.description || "No Description provided",
+            flags: 0,
+            permission_level: 0,
+            alias: -1,
+            overloads: [
+              cmd.options.arguments.map((v) => {
+                return {
+                  parameter_name: v.name,
+                  value_type: v.type,
+                  enum_type: "valid",
+                  optional: v.optional | false,
+                  options: {
+                    unused: 0,
+                    collapse_enum: 0,
+                    has_semantic_constraint: 0,
+                    as_chained_command: 0,
+                    unknown2: 0,
+                  },
+                };
+              }),
+            ],
+          });
+          client.write("available_commands", commands);
+        });
 
         setTimeout(async () => {
           // Allow the client to spawn

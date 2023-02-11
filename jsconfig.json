@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "typeRoots": [
-      "../typings"
-    ]
+    "module": "ESNext",
+    "moduleResolution": "NodeNext"
   }
 }

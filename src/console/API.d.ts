@@ -1,5 +1,5 @@
-import { Logger } from "../../src/console/Logger";
-import Server from "../../src/Server";
+import { Logger } from "../console/Logger.js";
+import Server from "../Server.js";
 
 declare function API(): {
   getLogger: () => Logger;

@@ -7,6 +7,7 @@ class Player {
    */
   constructor(client) {
     this.client = client;
+    this.username = client.username;
   }
 
   /**

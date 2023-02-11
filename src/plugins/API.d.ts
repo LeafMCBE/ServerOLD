@@ -1,6 +1,6 @@
 import { Logger } from "../console/Logger";
 import Server from "../Server";
-import { BaseOptions } from "./BasePlugin";
+import { BaseOptions } from "../base/BasePlugin.js";
 
 declare function API(options: BaseOptions): {
   getLogger: () => Logger;

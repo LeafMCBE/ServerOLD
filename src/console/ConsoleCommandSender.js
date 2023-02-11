@@ -6,7 +6,7 @@ import srv from "../../start.js";
 export default class CCS {
   constructor() {
     /**
-     * @type {import('../base/BaseCommand').Command[]}
+     * @type {import('../base/BaseCommand.js').Command[]}
      */
     this.commands = [];
   }
@@ -36,19 +36,58 @@ export default class CCS {
           _.filter((_v, i) => i !== 0).forEach((v) => args.push(v));
         }
 
-        this.commands.forEach((cmd) => {
+        for (let cmd of this.commands) {
           if (
-            _[0] === cmd.options.name.toLowerCase() ||
-            cmd.options.aliases.includes(_[0].toLowerCase())
+            cmd.options.name === _[0] ||
+            cmd.options.aliases?.includes(_[0].toLowerCase())
           ) {
+            if (args.length < cmd.options.args.min)
+              return new Logger({
+                name: "Console",
+                debug: srv.config.LeafMCBE.debug,
+              }).info(
+                `Minimum arguments is ${cmd.options.args.min} but got ${
+                  args.length
+                }
+Usage: /${
+                  cmd.options.aliases
+                    ? `[${cmd.options.name}|${cmd.options.aliases.join("|")}]`
+                    : `${cmd.options.name}`
+                } ${cmd.options.arguments
+                  .map(
+                    (arg) => `
+${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
+                  )
+                  .join(" ")}`
+              );
+
+            if (args.length > cmd.options.args.max)
+              return new Logger({
+                name: "Console",
+                debug: srv.config.LeafMCBE.debug,
+              }).info(
+                `Maximum arguments is ${cmd.options.args.max} but got ${
+                  args.length
+                }
+Usage: /${
+                  cmd.options.aliases
+                    ? `[${cmd.options.name}|${cmd.options.aliases.join("|")}]`
+                    : `${cmd.options.name}`
+                } ${cmd.options.arguments
+                  .map(
+                    (arg) =>
+                      `${
+                        arg.optional
+                          ? `[${arg.name}: ${arg.type}]`
+                          : `<${arg.name}: ${arg.type}>`
+                      }`
+                  )
+                  .join(" ")}`
+              );
+
             cmd.run(args);
-          } else {
-            new Logger({
-              name: "Console",
-              debug: srv.config.LeafMCBE.debug,
-            }).info("Invaild Command");
           }
-        });
+        }
       });
     });
   }

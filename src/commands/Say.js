@@ -9,6 +9,13 @@ class Say extends Command {
         min: 1,
         max: 1,
       },
+      arguments: [
+        {
+          name: "message",
+          type: "string",
+          optional: false,
+        },
+      ],
     });
   }
 

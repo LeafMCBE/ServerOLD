@@ -9,6 +9,7 @@ import Colors from "./api/Colors.js";
 import CCS from "./console/ConsoleCommandSender.js";
 import Player from "./api/Player.js";
 import Events from "./api/Events.js";
+import Ban from "./api/Ban.js";
 const config = fs.readFileSync("./leaf/config.yml", "utf-8");
 
 if (YML.parse(config).LeafMCBE.doNotCrashOnError) {
@@ -22,6 +23,7 @@ class Server {
    * @type {import('./api/Player').default[]}
    */
   clients = [];
+  banned = new Ban();
   config = YML.parse(config);
   logger = {
     srv: new Logger({ name: "Server", debug: this.config.LeafMCBE.debug }),
@@ -65,7 +67,8 @@ class Server {
             client.username = client.getUserData().displayName;
 
             const pl = new Player(client);
-            this.clients.push(pl);
+            const v = await this.banned.check(pl);
+            if (!v) this.clients.push(pl);
 
             this.logger.srv.info(`${client.username}[${client.ip}] connected`);
 
@@ -173,12 +176,29 @@ class Server {
             var min = String(cmdName).split(" ").slice(1).length;
             if (min < cmd.options.args.min)
               return new Player(client).send(
-                `Minimum argument is ${cmd.options.args.min} but got ${min}`
+                `Minimum argument is ${cmd.options.args.min} but got ${min}
+Usage: /${
+                  cmd.options.aliases
+                    ? `[${cmd.options.name}|${cmd.options.aliases.join("|")}]`
+                    : `${cmd.options.name}`
+                } ${cmd.options.arguments.map(
+                  (arg) => `
+${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
+                )}                 
+                `
               );
 
-            if (cmd.options.args.max < min)
+            if (min > cmd.options.args.mix)
               return new Player(client).send(
-                `Maximum arguments is ${cmd.options.args.min} but got ${min}`
+                `Maximum arguments is ${cmd.options.args.min} but got ${min}
+Usage: /${
+                  cmd.options.aliases
+                    ? `[${cmd.options.name}|${cmd.options.aliases.join("|")}]`
+                    : `${cmd.options.name}`
+                } ${cmd.options.arguments.map(
+                  (arg) => `
+${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
+                )}`
               );
 
             cmd.runAsPlayer(

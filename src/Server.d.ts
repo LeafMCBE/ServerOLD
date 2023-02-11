@@ -1,8 +1,9 @@
 import { Server, Client, Version } from "bedrock-protocol";
-import { Logger } from "../src/console/Logger";
-import { Plugins } from "../src/plugins/Plugins";
-import CCS from "../src/console/ConsoleCommandSender";
-import Player from "../src/api/Player";
+import { Logger } from "./console/Logger.js";
+import { Plugins } from "./plugins/Plugins.js";
+import CCS from "./console/ConsoleCommandSender.js";
+import Player from "./api/Player.js";
+import Ban from "./api/Ban.js";
 
 interface Configure {
   Server: {
@@ -19,6 +20,7 @@ interface Configure {
 
 export default class {
   public readonly config: Configure;
+  public readonly banned: Ban;
   public readonly logger: {
     srv: Logger;
     plugin: Logger;

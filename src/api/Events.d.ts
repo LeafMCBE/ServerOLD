@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import Player from "../../src/api/Player";
+import Player from "../api/Player.js";
 
 declare class Events extends EventEmitter {
   on(name: "playerJoin", listener: (player: Player) => void): void;
