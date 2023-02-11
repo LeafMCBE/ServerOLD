@@ -15,7 +15,8 @@ export default class ResourcePackClientResponse {
         );
         try {
           for (let plugin of await server.plugins.load()) {
-            if (plugin.onPlayerRefusedRps) plugin.onPlayerRefusedRps();
+            if (plugin.onPlayerRefusedRps)
+              plugin.onPlayerRefusedRps(new Player(client));
           }
         } catch (e) {
           server.logger.srv.error(`Error from Plugin`);
@@ -27,7 +28,8 @@ export default class ResourcePackClientResponse {
         server.logger.srv.debug(`${client.username} have all the rps.`);
         try {
           for (let plugin of await server.plugins.load()) {
-            if (plugin.onPlayerHavingAllRps) plugin.onPlayerHavingAllRps();
+            if (plugin.onPlayerHavingAllRps)
+              plugin.onPlayerHavingAllRps(new Player(client));
           }
         } catch (e) {
           server.logger.srv.error(`Error from Plugin`);
@@ -76,17 +78,12 @@ export default class ResourcePackClientResponse {
 
         try {
           for (let plugin of await server.plugins.load()) {
-            if (plugin.onPlayerInstalledRps) plugin.onPlayerInstalledRps();
+            if (plugin.onPlayerInstalledRps)
+              plugin.onPlayerInstalledRps(new Player(client));
           }
         } catch (e) {
-          if (server.config.notCrashOnPluginError) {
-            server.logger.srv.warn(
-              `Error from Plugin in Having all rps. Not exiting due to configure.`
-            );
-          } else {
-            server.logger.srv.error(`Error from Plugin`);
-            throw e;
-          }
+          server.logger.srv.error(`Error from Plugin`);
+          throw e;
         }
 
         let commands = {

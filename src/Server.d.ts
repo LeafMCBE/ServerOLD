@@ -4,6 +4,7 @@ import { Plugins } from "./plugins/Plugins.js";
 import CCS from "./console/ConsoleCommandSender.js";
 import Player from "./api/Player.js";
 import Ban from "./api/Ban.js";
+import Events from "./api/Events.js";
 
 interface Configure {
   Server: {
@@ -21,6 +22,7 @@ interface Configure {
 export default class {
   public readonly config: Configure;
   public readonly banned: Ban;
+  public readonly events: Events;
   public readonly logger: {
     srv: Logger;
     plugin: Logger;

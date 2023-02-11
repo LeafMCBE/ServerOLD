@@ -1,6 +1,6 @@
-import { Client } from "bedrock-protocol";
+import Player from "../api/Player.js";
 import { Logger } from "../console/Logger.js";
-import Server from "../Server.js";
+import Server from "../Server.";
 
 export interface BaseOptions {
   name: string;
@@ -19,10 +19,10 @@ export declare class Base {
 
   onEnable(): void;
   onDisable(): void;
-  onPlayerJoin(player: Client): void;
-  onPlayerPreJoin(player: Client): void;
-  onPlayerLeave(player: Client): void;
-  onPlayerHavingAllRps(): void;
-  onPlayerRefusedRps(): void;
-  onPlayerInstalledRps(): void;
+  onPlayerJoin(player: Player): void;
+  onPlayerPreJoin(player: Player): void;
+  onPlayerLeave(player: Player): void;
+  onPlayerHavingAllRps(player: Player): void;
+  onPlayerRefusedRps(player: Player): void;
+  onPlayerInstalledRps(player: Player): void;
 }

@@ -92,7 +92,7 @@ class Server {
 
             try {
               for (let plugin of await this.plugins.load()) {
-                if (plugin.onPlayerPreJoin) plugin.onPlayerPreJoin(client);
+                if (plugin.onPlayerPreJoin) plugin.onPlayerPreJoin(new Player(client));
               }
             } catch (e) {
               this.logger.error(`Error from Plugin`);
@@ -113,7 +113,8 @@ class Server {
             this.events.emit("playerJoin", new Player(client));
             try {
               for (let plugin of await this.plugins.load()) {
-                if (plugin.onPlayerJoin) plugin.onPlayerJoin(client);
+                if (plugin.onPlayerJoin)
+                  plugin.onPlayerJoin(new Player(client));
               }
             } catch (e) {
               if (this.config.notCrashOnPluginError) {
@@ -212,7 +213,7 @@ ${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
         this.events.emit("playerLeft", new Player(client));
         try {
           for (let plugin of await this.plugins.load()) {
-            if (plugin.onPlayerLeave) plugin.onPlayerLeave(client);
+            if (plugin.onPlayerLeave) plugin.onPlayerLeave(new Player(client));
           }
         } catch (e) {
           if (this.config.notCrashOnPluginError) {
