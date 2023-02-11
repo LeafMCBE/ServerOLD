@@ -11,6 +11,9 @@ A Server Software for Minecraft: Bedrock Edition written in Javascript (With typ
 
 - Plugins Supported
 - Logger Supported
+- Commands Supported
+- Console Commands Supported
+- Events Supported
 
 ## Installation
 
