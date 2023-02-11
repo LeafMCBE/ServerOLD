@@ -44,5 +44,3 @@ class Example extends Base {
 
 - Convert Packet into JS (not json)
 - Add chunk support (maybe)
-- Commands System
-- Console Command Sender
