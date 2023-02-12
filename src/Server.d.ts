@@ -33,7 +33,6 @@ export default class {
   public readonly plugins: Plugins;
   public readonly console: CCS;
   public readonly clients: Player[];
-
   constructor();
 
   public broadcast(message: string): void;

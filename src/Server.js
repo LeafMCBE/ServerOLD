@@ -2,7 +2,6 @@ import Protocol from "bedrock-protocol";
 import ResourcePackClientResponse from "./packets/handler/ResourcePackClientResponse.js";
 import fs from "fs";
 import YML from "yaml";
-
 import { Logger } from "./console/Logger.js";
 import { Plugins } from "./plugins/Plugins.js";
 import Colors from "./api/Colors.js";
@@ -64,6 +63,7 @@ class Server {
           client.on("join", async () => {
             client.ip = client.connection.address;
             client.username = client.getUserData().displayName;
+            client.items = [];
 
             const pl = new Player(client);
             const v = await this.banned.check(pl);
@@ -241,6 +241,59 @@ ${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
         break;
       case "container_close":
         ContainerClose(client);
+        break;
+      case "item_stack_request":
+        var count = 0;
+        var network_id = 0;
+        var block_runtime_id = 0;
+
+        try {
+          count = packet.data.params.requests[0].actions[2].count;
+        } catch (e) {
+          /* If there is no count this means that the player removed the item from his inventory */
+        }
+        try {
+          network_id =
+            packet.data.params.requests[0].actions[1].result_items[0]
+              .network_id;
+        } catch (e) {
+          /* If there is no network id this means that the player removed the item from his inventory */
+        }
+
+        try {
+          block_runtime_id =
+            packet.data.params.requests[0].actions[1].result_items[0]
+              .block_runtime_id;
+        } catch (e) {
+          /* If there is no block runtime id this means that the player removed the item from his inventory */
+        }
+
+        var jsondata = {
+          count,
+          network_id,
+          block_runtime_id,
+        };
+
+        client.items.push(jsondata);
+        for (let i = 0; i < client.items.length; i++) {
+          client.write("inventory_slot", {
+            window_id: "inventory",
+            slot: i,
+            item: {
+              network_id: client.items[i].network_id,
+              count: client.items[i].count,
+              metadata: 0,
+              has_stack_id: 1,
+              stack_id: 1,
+              block_runtime_id: client.items[i].block_runtime_id,
+              extra: {
+                has_nbt: 0,
+                can_place_on: [],
+                can_destroy: [],
+              },
+            },
+          });
+        }
         break;
     }
   }

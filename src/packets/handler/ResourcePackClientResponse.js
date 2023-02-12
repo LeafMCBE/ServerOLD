@@ -2,6 +2,7 @@ import { Client } from "bedrock-protocol";
 import item from "bedrock-protocol/types/Item.js";
 import fs from "fs";
 import YML from "yaml";
+import StartGame from "../StartGame.js";
 const Item = item(
   YML.parse(fs.readFileSync("./leaf/config.yml", "utf-8")).Server.version
 );
@@ -47,23 +48,16 @@ export default class ResourcePackClientResponse {
           client.queue("inventory_slot", {
             window_id: 120,
             slot: 0,
-            item: {
-              network_id: 0,
-              count: 0,
-              metadata: 0,
-              has_stack_id: 1,
-              stack_id: 1,
-              block_runtime_id: 0,
-              extra: {
-                has_nbt: 0,
-                can_place_on: [],
-                can_destroy: [],
-              },
-            },
+            item: new Item().toBedrock(),
           });
         }
 
-        client.queue("start_game", await this.get("start_game"));
+        StartGame.world_gamemode = server.config.World.gamemode;
+        StartGame.player_gamemode = server.config.World.gamemode;
+        StartGame.dimension = server.config.World.dimension;
+        StartGame.biome = server.config.World.biome;
+
+        client.queue("start_game", StartGame);
         client.queue("player_list", await this.get("player_list"));
         client.queue("item_component", { entries: [] });
         client.queue(
@@ -155,6 +149,13 @@ export default class ResourcePackClientResponse {
           // Allow the client to spawn
           client.write("play_status", { status: "player_spawn" });
         }, 3000);
+
+        client.on("tick_sync", (packet) => {
+          client.queue("tick_sync", {
+            request_time: packet.request_time,
+            response_time: BigInt(Date.now()),
+          });
+        });
         break;
     }
   }
