@@ -25,6 +25,43 @@ class Ban extends Command {
     });
   }
 
+  runAsPlayer(player, args) {
+    const b = this.api.getServer().banned.get();
+
+    if (b.includes(args[0]))
+      return this.api.getLogger().info("This player already been banned.");
+
+    if (
+      this.api
+        .getServer()
+        .clients.filter(async (pl) => pl.client.username === args[0])[0]
+    ) {
+      this.api
+        .getServer()
+        .clients.filter(async (pl) => pl.client.username === args[0])[0]
+        .kick(`You were been banned by ${player.username}`);
+
+      const doc = new YML.Document();
+      b.push({
+        name: args[0],
+        by: player.username,
+      });
+      doc.contents = b;
+
+      fs.writeFileSync("./leaf/banned-player.yml", String(doc));
+      this.api
+        .getLogger()
+        .info(
+          `Banned ${
+            this.api
+              .getServer()
+              .clients.filter(async (pl) => pl.client.username === args[0])[0]
+              .client.username
+          }`
+        );
+    } else this.api.getLogger().info("Player not online.");
+  }
+
   run(args) {
     const b = this.api.getServer().banned.get();
 
@@ -32,16 +69,33 @@ class Ban extends Command {
       return this.api.getLogger().info("This player already been banned.");
 
     if (
-      this.api.getServer().clients.filter(async (pl) => pl.username === args[0])
+      this.api
+        .getServer()
+        .clients.filter(async (pl) => pl.client.username === args[0])[0]
     ) {
       this.api
         .getServer()
-        .clients.find((pl) => pl.username === args[0])
+        .clients.filter(async (pl) => pl.client.username === args[0])[0]
         .kick("You were been banned by CONSOLE");
 
       const doc = new YML.Document();
-      doc.contents = b.push(args[0]);
-      fs.writeFileSync("./leaf/banned-player.yml", doc.toString());
+      b.push({
+        name: args[0],
+        by: "CONSOLE",
+      });
+      doc.contents = b;
+
+      fs.writeFileSync("./leaf/banned-player.yml", String(doc));
+      this.api
+        .getLogger()
+        .info(
+          `Banned ${
+            this.api
+              .getServer()
+              .clients.filter(async (pl) => pl.client.username === args[0])[0]
+              .client.username
+          }`
+        );
     } else this.api.getLogger().info("Player not online.");
   }
 }

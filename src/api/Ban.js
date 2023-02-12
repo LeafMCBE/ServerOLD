@@ -28,12 +28,16 @@ class Ban {
 
     const file = fs.readFileSync("./leaf/banned-player.yml", "utf-8");
     /**
-     * @type {string[]}
+     * @type {import('./Ban.js').BanList[]}
      */
     const banned = YML.parse(file);
 
-    if (banned.includes(player.username)) {
-      player.kick("You were been banned.");
+    if (banned.find((v) => v.name === player.username)) {
+      player.kick(
+        `You were been banned by ${
+          banned.find((v) => v.name === player.username).by
+        }.`
+      );
       return true;
     } else false;
   }

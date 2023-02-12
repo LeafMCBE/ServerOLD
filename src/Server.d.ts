@@ -16,6 +16,7 @@ interface Configure {
   LeafMCBE: {
     debug: boolean;
     showDateOnLogging: boolean;
+    doNotCrashOnError: boolean;
   };
 }
 

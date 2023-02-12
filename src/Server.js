@@ -19,9 +19,6 @@ if (YML.parse(config).LeafMCBE.doNotCrashOnError) {
 }
 
 class Server {
-  /**
-   * @type {import('./api/Player').default[]}
-   */
   clients = [];
   banned = new Ban();
   config = YML.parse(config);
@@ -92,7 +89,8 @@ class Server {
 
             try {
               for (let plugin of await this.plugins.load()) {
-                if (plugin.onPlayerPreJoin) plugin.onPlayerPreJoin(new Player(client));
+                if (plugin.onPlayerPreJoin)
+                  plugin.onPlayerPreJoin(new Player(client));
               }
             } catch (e) {
               this.logger.error(`Error from Plugin`);
