@@ -36,7 +36,6 @@ export default class CCS {
           _.filter((_v, i) => i !== 0).forEach((v) => arg.push(v));
         }
         let args = arg.join(" ").match(/(?:[^\s"]+|"[^"]*")+/g);
-        console.log(args);
 
         for (let cmd of this.commands) {
           if (

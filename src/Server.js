@@ -167,15 +167,23 @@ class Server {
         break;
       case "command_request":
         var cmdName = packet.data.params.command;
+        var _ = cmdName.split(" ");
+        var arg = [];
+        if (_.length > 1) {
+          _.filter((_v, i) => i !== 0).forEach((v) => arg.push(v));
+        }
+        var args = arg.join(" ").match(/(?:[^\s"]+|"[^"]*")+/g);
+
         this.console.commands.forEach((cmd) => {
           if (
             cmdName.startsWith(`/${cmd.options.name.toLowerCase()}`) ||
             cmd.options.aliases.includes(cmdName.replace("/", ""))
           ) {
-            var min = String(cmdName).split(" ").slice(1).length;
-            if (min < cmd.options.args.min)
+            if (args.length < cmd.options.args.min)
               return new Player(client).send(
-                `Minimum argument is ${cmd.options.args.min} but got ${min}
+                `Minimum argument is ${cmd.options.args.min} but got ${
+                  args.length
+                }
 Usage: /${
                   cmd.options.aliases
                     ? `[${cmd.options.name}|${cmd.options.aliases.join("|")}]`
@@ -187,9 +195,11 @@ ${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
                 `
               );
 
-            if (min > cmd.options.args.mix)
+            if (args.length > cmd.options.args.mix)
               return new Player(client).send(
-                `Maximum arguments is ${cmd.options.args.min} but got ${min}
+                `Maximum arguments is ${cmd.options.args.min} but got ${
+                  args.length
+                }
 Usage: /${
                   cmd.options.aliases
                     ? `[${cmd.options.name}|${cmd.options.aliases.join("|")}]`
