@@ -31,10 +31,12 @@ export default class CCS {
         /**
          * @type {string[]}
          */
-        let args = [];
+        let arg = [];
         if (_.length > 1) {
-          _.filter((_v, i) => i !== 0).forEach((v) => args.push(v));
+          _.filter((_v, i) => i !== 0).forEach((v) => arg.push(v));
         }
+        let args = arg.join(" ").match(/(?:[^\s"]+|"[^"]*")+/g);
+        console.log(args);
 
         for (let cmd of this.commands) {
           if (

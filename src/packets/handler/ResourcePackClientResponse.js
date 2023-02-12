@@ -1,4 +1,7 @@
 import { Client } from "bedrock-protocol";
+import item from "bedrock-protocol/types/Item.js";
+import server from "../../../start.js";
+const Item = item(String(server.config.Server.version));
 
 export default class ResourcePackClientResponse {
   /**
@@ -37,6 +40,15 @@ export default class ResourcePackClientResponse {
         }
         break;
       case "completed":
+        c;
+        for (let i = 0; i < 3; i++) {
+          client.queue("inventory_slot", {
+            window_id: 120,
+            slot: 0,
+            item: new Item().toBedrock(),
+          });
+        }
+
         client.queue("start_game", await this.get("start_game"));
         client.queue("player_list", await this.get("player_list"));
         client.queue("item_component", { entries: [] });
