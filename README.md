@@ -11,6 +11,9 @@ A Server Software for Minecraft: Bedrock Edition written in Javascript (With typ
 
 - Plugins Supported
 - Logger Supported
+- Commands Supported
+- Console Commands Supported
+- Events Supported
 
 ## Installation
 
@@ -44,5 +47,3 @@ class Example extends Base {
 
 - Convert Packet into JS (not json)
 - Add chunk support (maybe)
-- Commands System
-- Console Command Sender
