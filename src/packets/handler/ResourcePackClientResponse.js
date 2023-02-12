@@ -1,7 +1,10 @@
 import { Client } from "bedrock-protocol";
 import item from "bedrock-protocol/types/Item.js";
-import server from "../../../start.js";
-const Item = item(String(server.config.Server.version));
+import fs from "fs";
+import YML from "yaml";
+const Item = item(
+  YML.parse(fs.readFileSync("./leaf/config.yml", "utf-8")).Server.version
+);
 
 export default class ResourcePackClientResponse {
   /**
@@ -40,12 +43,23 @@ export default class ResourcePackClientResponse {
         }
         break;
       case "completed":
-        c;
         for (let i = 0; i < 3; i++) {
           client.queue("inventory_slot", {
             window_id: 120,
             slot: 0,
-            item: new Item().toBedrock(),
+            item: {
+              network_id: 0,
+              count: 0,
+              metadata: 0,
+              has_stack_id: 1,
+              stack_id: 1,
+              block_runtime_id: 0,
+              extra: {
+                has_nbt: 0,
+                can_place_on: [],
+                can_destroy: [],
+              },
+            },
           });
         }
 

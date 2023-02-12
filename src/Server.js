@@ -10,6 +10,8 @@ import CCS from "./console/ConsoleCommandSender.js";
 import Player from "./api/Player.js";
 import Events from "./api/Events.js";
 import Ban from "./api/Ban.js";
+import Interact from "./packets/handler/Interact.js";
+import ContainerClose from "./packets/ContainerClose.js";
 const config = fs.readFileSync("./leaf/config.yml", "utf-8");
 
 if (YML.parse(config).LeafMCBE.doNotCrashOnError) {
@@ -177,7 +179,7 @@ class Server {
         this.console.commands.forEach((cmd) => {
           if (
             cmdName.startsWith(`/${cmd.options.name.toLowerCase()}`) ||
-            cmd.options.aliases.includes(cmdName.replace("/", ""))
+            cmd.options.aliases?.includes(cmdName.replace("/", ""))
           ) {
             if (args.length < cmd.options.args.min)
               return new Player(client).send(
@@ -233,6 +235,12 @@ ${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
             throw e;
           }
         }
+        break;
+      case "interact":
+        Interact(packet, client);
+        break;
+      case "container_close":
+        ContainerClose(client);
         break;
     }
   }

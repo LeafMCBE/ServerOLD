@@ -26,6 +26,8 @@ export default class CCS {
         output: process.stdout,
       });
 
+      rl.setPrompt("");
+
       rl.on("line", (data) => {
         const _ = data.split(" ");
         /**
@@ -35,7 +37,7 @@ export default class CCS {
         if (_.length > 1) {
           _.filter((_v, i) => i !== 0).forEach((v) => arg.push(v));
         }
-        let args = arg.join(" ").match(/(?:[^\s"]+|"[^"]*")+/g);
+        let args = arg.join(" ").match(/(?:[^\s"]+|"[^"]*")+/g) || [];
 
         for (let cmd of this.commands) {
           if (
