@@ -109,6 +109,27 @@ class Server {
             });
           });
 
+          client.on('close', async () => {
+            const i = this.clients.findIndex((v) => v.username === client.username);
+            delete this.clients[i];
+            this.events.emit("playerLeft", new Player(client));
+            try {
+              for (let plugin of await this.plugins.load()) {
+                if (plugin.onPlayerLeave)
+                  plugin.onPlayerLeave(new Player(client));
+              }
+            } catch (e) {
+              if (this.config.notCrashOnPluginError) {
+                this.logger.srv.warn(
+                  `Error from Plugin in Having all rps. Not exiting due to configure.`
+                );
+              } else {
+                this.logger.srv.error(`Error from Plugin`);
+                throw e;
+              }
+            }
+          })
+
           client.on("spawn", async () => {
             this.events.emit("playerJoin", new Player(client));
             try {
@@ -163,6 +184,7 @@ class Server {
           platform_chat_id: "",
           message: `<${client.username}> ${packet.data.params.message}`,
         });
+
         this.logger.chat.info(
           Colors.colorize(`<${client.username}> ${packet.data.params.message}`)
         );
@@ -181,7 +203,7 @@ class Server {
             cmdName.startsWith(`/${cmd.options.name.toLowerCase()}`) ||
             cmd.options.aliases?.includes(cmdName.replace("/", ""))
           ) {
-            if (args.length < cmd.options.args.min)
+            if (args && args.length < cmd.options.args.min)
               return new Player(client).send(
                 `Minimum argument is ${cmd.options.args.min} but got ${
                   args.length
@@ -197,7 +219,7 @@ ${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
                 `
               );
 
-            if (args.length > cmd.options.args.mix)
+            if (args && args.length > cmd.options.args.mix)
               return new Player(client).send(
                 `Maximum arguments is ${cmd.options.args.min} but got ${
                   args.length

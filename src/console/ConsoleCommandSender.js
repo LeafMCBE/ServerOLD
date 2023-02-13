@@ -28,6 +28,10 @@ export default class CCS {
 
       rl.setPrompt("");
 
+      rl.on("SIGINT", () => {
+        process.emit("SIGINT");
+      });
+
       rl.on("line", (data) => {
         const _ = data.split(" ");
         /**

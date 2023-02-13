@@ -39,7 +39,9 @@ class Ban {
         }.`
       );
       return true;
-    } else false;
+    } else {
+      return false;
+    }
   }
 }
 

@@ -1,4 +1,5 @@
 import { Command } from "../base/BaseCommand.js";
+import shut from "../api/Shutdown.js";
 
 class Shutdown extends Command {
   constructor() {
@@ -14,25 +15,16 @@ class Shutdown extends Command {
   }
 
   run() {
-    this.api.getLogger().info("Shut downing the server in few seconds...");
     this.api.getServer().broadcast("Shut downing the server in few seconds...");
     setTimeout(() => {
-      this.api.getServer().clients.forEach((pl) => {
-        pl.kick("Server Closed");
-      });
-      this.api.getServer().srv.close("Server Closed");
-      process.exit(0);
+      shut(this.api.getServer());
     }, 2000);
   }
 
   runAsPlayer() {
     this.api.getServer().broadcast("Shut downing the server in few seconds...");
     setTimeout(() => {
-      this.api.getServer().clients.forEach((pl) => {
-        pl.kick("Server Closed");
-      });
-      this.api.getServer().srv.close("Server Closed");
-      process.exit(0);
+      shut(this.api.getServer());
     }, 2000);
   }
 }
