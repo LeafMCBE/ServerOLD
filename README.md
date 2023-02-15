@@ -1,4 +1,4 @@
-# LeafMCBE
+# LeafMCBE - ARCHIVED, GO https://github.com/LeafMCBE/Server
 
 A Server Software for Minecraft: Bedrock Edition written in Javascript (With types). Server under development
 
