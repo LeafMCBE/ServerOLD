@@ -10,6 +10,6 @@ LeafMCBE:
   doNotCrashOnError: true
 
 World:
-  gamemode: "survival" # survival / creative / adventure
+  gamemode: "creative" # survival / creative / adventure
   dimension: "flat" # overworld / flat / nether / end / void
   biome: "plains" # https://minecraft-data.prismarine.js.org/?v=bedrock_1.19.50&d=biomes

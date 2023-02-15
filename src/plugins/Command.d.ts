@@ -1,4 +1,6 @@
 import Player from "../api/Player.js";
+import { Logger } from "../console/Logger.js";
+import Server from "../Server.js";
 
 interface ArgOptions {
   name: string;
@@ -38,6 +40,10 @@ interface Options {
 
 declare class Command {
   public readonly options: Options;
+  public readonly api: {
+    getLogger: () => Logger;
+    getServer: () => Server;
+  };
 
   constructor(options: Options);
 

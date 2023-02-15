@@ -109,10 +109,26 @@ class Server {
             });
           });
 
-          client.on('close', async () => {
-            const i = this.clients.findIndex((v) => v.username === client.username);
+          client.on("close", async () => {
+            const i = this.clients.findIndex(
+              (v) => v.username === client.username
+            );
             delete this.clients[i];
             this.events.emit("playerLeft", new Player(client));
+
+            let content = {
+              username: client.username,
+              items: client.items,
+            };
+
+            const document = new YML.Document(content);
+
+            fs.writeFileSync(
+              `./leaf/players/${content.username}.yml`,
+              String(document),
+              "utf-8"
+            );
+
             try {
               for (let plugin of await this.plugins.load()) {
                 if (plugin.onPlayerLeave)
@@ -128,9 +144,37 @@ class Server {
                 throw e;
               }
             }
-          })
+          });
 
           client.on("spawn", async () => {
+            if (
+              fs.statSync(`./leaf/players/${client.username}.yml`)?.isFile()
+            ) {
+              const file = fs.readFileSync(
+                `./leaf/players/${client.username}.yml`,
+                { encoding: "utf-8", flag: "r" }
+              );
+              const dec = YML.parse(file);
+              for (let i = 0; i < dec.items.length; i++) {
+                client.write("inventory_slot", {
+                  window_id: "inventory",
+                  slot: i,
+                  item: {
+                    network_id: dec.items[i].network_id,
+                    count: dec.items[i].count,
+                    metadata: 0,
+                    has_stack_id: 1,
+                    stack_id: 1,
+                    block_runtime_id: dec.items[i].block_runtime_id,
+                    extra: {
+                      has_nbt: 0,
+                      can_place_on: [],
+                      can_destroy: [],
+                    },
+                  },
+                });
+              }
+            }
             this.events.emit("playerJoin", new Player(client));
             try {
               for (let plugin of await this.plugins.load()) {

@@ -1,6 +1,6 @@
 import Player from "../api/Player.js";
 import { Logger } from "../console/Logger.js";
-import Server from "../Server.";
+import Server from "../Server.js";
 
 export interface BaseOptions {
   name: string;

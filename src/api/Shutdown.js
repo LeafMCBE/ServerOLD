@@ -17,7 +17,11 @@ function Shutdown(server) {
     const document = new YML.Document(content);
 
     console.log(String(document));
-    fs.writeFileSync(`./leaf/players/${content.username}`, String(document), "utf-8");
+    fs.writeFileSync(
+      `./leaf/players/${content.username}.yml`,
+      String(document),
+      "utf-8"
+    );
   });
 
   server.srv.close("Server Closed");
